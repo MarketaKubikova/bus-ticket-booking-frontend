@@ -25,13 +25,16 @@ jobs:
       - name: Build project
         run: npm run build
 
-      - name: Run tests (optional)
-        run: npm test || true
+      - name: Run tests
+        run: npx vitest run --coverage || true
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v2
         with:
           projectBaseDir: .
-          args: -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }} -Dsonar.organization=${{ secrets.SONAR_ORGANIZATION }}
+          args: >
+            -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }}
+            -Dsonar.organization=${{ secrets.SONAR_ORGANIZATION }}
+            -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
